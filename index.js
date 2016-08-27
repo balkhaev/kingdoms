@@ -1,18 +1,27 @@
-import gameloop from 'node-gameloop'
-import World from './entities/world.class'
+import Mapgame from './mapgame'
 
 const kingdoms = ['Narkia', 'Heshelpek']
-const world = new World()
 
-kingdoms.forEach(kingdomName => {
-	world.create('kingdom', {
-		name: kingdomName
-	})
+global.game = new Mapgame({
+	daysLimit: 50
 })
 
-var id = gameloop.setGameLoop(world.loop, 1000 / 30)
+game.init({
+	cards: require('./entities/cards').default,
+	events: require('./entities/events').default,
+	kingdoms: require('./entities/kingdoms').default
+})
 
-setTimeout(function() {
-	console.log(world.getSummary())
-	gameloop.clearGameLoop(id)
-}, 2000)
+kingdoms.forEach(kingdomName => {
+	game.world.createKingdom(kingdomName)
+})
+
+game.after('end', summary => {
+	console.log(summary)
+})
+
+game.world.after('newWeek', week => {
+	console.log(`[Hook][[World][newWeek] New week: ${week}`)
+})
+
+game.start()

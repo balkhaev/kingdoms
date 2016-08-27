@@ -10,21 +10,32 @@ export function getRandomKey(obj) {
 }
 
 export function getRandomElement(array) {
-	return array[getRandomInt(0, getRandomElement.length - 1)]
+	return array[getRandomInt(0, array.length - 1)]
 }
 
 export function getChance(chance) {
 	return chance > getRandomInt(0, 100)
 }
 
-export function getProbability(capabilities) {
-	const probability = new Array(100)
+export function getProbability(capabilities, limit = 1) {
+	const probability = []
+	const result = []
 
-	capabilities.forEach(({capability, chance}) => {
-		probability.fill(capability, 100 - chance)
+	capabilities.forEach(({ fn, score }) => {
+		const capabilitiy = new Array(score)
+
+		capabilitiy.fill(fn)
+
+		probability.push(...capabilitiy)
 	})
 
-	return getRandomElement(probability)
+	for(let i = 0; i < limit; i++) {
+		const randomElement = getRandomElement(probability)
+
+		result.push(randomElement)
+	}
+
+	return result
 }
 
 export default {
