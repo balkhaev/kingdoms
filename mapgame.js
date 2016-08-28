@@ -1,47 +1,47 @@
+import path from 'path'
 import gameloop from 'node-gameloop'
 
 import Hookable from './lib/base/hookable.base'
 
-import Card from './lib/class/card.class'
-import Event from './lib/class/event.class'
-import World from './lib/class/world.class'
-import Kingdom from './lib/class/kingdom.class'
+import World from './lib/world.class'
 
-import DateManager from './lib/manager/date.manager'
-import CardManager from './lib/manager/card.manager'
-import EventManager from './lib/manager/event.manager'
-import KingdomManager from './lib/manager/kingdom.manager'
+import CardManager from './lib/card/card.manager'
+import EventManager from './lib/event/event.manager'
+import KingdomManager from './lib/kingdom/kingdom.manager'
 
 export default class Mapgame extends Hookable {
-	constructor({ daysLimit = 365 } = {}) {
+	constructor({ daysLimit = 365, entities: { cardsPath, eventsPath, kingdomsPath }  } = {}) {
 		super()
 
 		this.frame = 0
 
 		this.daysLimit = daysLimit
 
-		this.class = {
-			Card,
-			Event,
-			Kingdom
-		}
+		this.cardsPath = path.join(__dirname, cardsPath)
+		this.eventsPath = path.join(__dirname, eventsPath)
+		this.kingdomsPath = path.join(__dirname, kingdomsPath)
+
+		this.card = new CardManager({ entitiesPath: this.cardsPath })
+		this.event = new EventManager({ entitiesPath: this.eventsPath })
+		this.kingdom = new KingdomManager({ entitiesPath: this.kingdomsPath })
 
 		this.end = this.end.bind(this)
 		this.loop = this.loop.bind(this)
 	}
 
-	init({ cards = {}, events = {}, kingdoms = {} } = {}) {
+	init() {
 		this.world = new World(this.daysLimit)
 
-		this.date = new DateManager()
-		this.card = new CardManager(cards)
-		this.event = new EventManager(events)
-		this.kingdom = new KingdomManager(kingdoms)
-
-		console.log(this.event.getWeekEvents())
+		this.card.init()
+		this.event.init()
+		this.kingdom.init()
 	}
 
 	start() {
+		this.kingdom.entities.forEach(kingdom => {
+			this.world.createKingdom(kingdom)
+		})
+
 		this.gameId = gameloop.setGameLoop(this.loop, 1000 / 30)
 
 		console.log(`[Mapgame][start] New game: ${this.gameId}`)

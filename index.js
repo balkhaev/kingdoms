@@ -1,27 +1,22 @@
 import Mapgame from './mapgame'
 
-const kingdoms = ['Narkia', 'Heshelpek']
-
 global.game = new Mapgame({
-	daysLimit: 50
+	daysLimit: 50,
+	entities: {
+		cardsPath: './entities/cards',
+		eventsPath: './entities/events',
+		kingdomsPath: './entities/kingdoms',
+	}
 })
 
-game.init({
-	cards: require('./entities/cards').default,
-	events: require('./entities/events').default,
-	kingdoms: require('./entities/kingdoms').default
-})
-
-kingdoms.forEach(kingdomName => {
-	game.world.createKingdom(kingdomName)
-})
+game.init()
 
 game.after('end', summary => {
 	console.log(summary)
 })
 
 game.world.after('newWeek', week => {
-	console.log(`[Hook][[World][newWeek] New week: ${week}`)
+	console.log(`[Index][Hook] -> [World][after][newWeek] New week: ${week}`)
 })
 
 game.start()
