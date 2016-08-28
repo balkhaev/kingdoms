@@ -10,7 +10,7 @@ import EventManager from './lib/event/event.manager'
 import KingdomManager from './lib/kingdom/kingdom.manager'
 
 export default class Mapgame extends Hookable {
-	constructor({ daysLimit = 365, entities: { cardsPath, eventsPath, kingdomsPath }  } = {}) {
+	constructor({ daysLimit, entities: { cardsPath, eventsPath, kingdomsPath }  } = {}) {
 		super()
 
 		this.frame = 0
@@ -35,6 +35,14 @@ export default class Mapgame extends Hookable {
 		this.card.init()
 		this.event.init()
 		this.kingdom.init()
+
+		this.initHooks()
+
+		return this
+	}
+
+	initHooks() {
+		this.world.after('newWeek', this.event.newWeek)
 	}
 
 	start() {
@@ -45,18 +53,25 @@ export default class Mapgame extends Hookable {
 		this.gameId = gameloop.setGameLoop(this.loop, 1000 / 30)
 
 		console.log(`[Mapgame][start] New game: ${this.gameId}`)
+
+		return this
 	}
 
 	loop(delta) {
 		const isNewWeek = this.frame % 7 === 0
+		const isNewMonth = this.frame % 30 === 0
 
 		this.callBefore('loop', this)
 
-		this.world.newDay()
+		if (isNewMonth) {
+			this.world.newMonth()
+		}
 
 		if (isNewWeek) {
 			this.world.newWeek()
 		}
+
+		this.world.newDay()
 
 		this.frame++
 
@@ -71,6 +86,8 @@ export default class Mapgame extends Hookable {
 		gameloop.clearGameLoop(this.gameId)
 
 		this.callAfter('end', this.getSummary())
+
+		return this
 	}
 
 	getSummary() {

@@ -1,7 +1,8 @@
 import Mapgame from './mapgame'
+import webServer from './web/server'
 
 global.game = new Mapgame({
-	daysLimit: 50,
+	daysLimit: 30,
 	entities: {
 		cardsPath: './entities/cards',
 		eventsPath: './entities/events',
@@ -11,12 +12,10 @@ global.game = new Mapgame({
 
 game.init()
 
+webServer(game)
+
 game.after('end', summary => {
 	console.log(summary)
-})
-
-game.world.after('newWeek', world => {
-	console.log(`[Index][Hook] -> [World][after][newWeek] New week: ${world.week}`)
 })
 
 game.start()

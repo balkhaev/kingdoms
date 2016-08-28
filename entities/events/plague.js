@@ -2,6 +2,6 @@ export const name = 'plague'
 
 export const score = 3
 
-export function plague(game) {
+export function hooks(kingdom) {
 
 }

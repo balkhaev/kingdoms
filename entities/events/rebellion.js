@@ -2,6 +2,6 @@ export const name = 'rebellion'
 
 export const score = 2
 
-export function rebellion(game) {
+export function hooks(kingdom) {
 
 }
