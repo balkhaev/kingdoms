@@ -15,8 +15,8 @@ game.after('end', summary => {
 	console.log(summary)
 })
 
-game.world.after('newWeek', week => {
-	console.log(`[Index][Hook] -> [World][after][newWeek] New week: ${week}`)
+game.world.after('newWeek', world => {
+	console.log(`[Index][Hook] -> [World][after][newWeek] New week: ${world.week}`)
 })
 
 game.start()
