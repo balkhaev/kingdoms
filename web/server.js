@@ -12,7 +12,7 @@ const router = new Router({
 app.use(serve('public'))
 
 export default function(game) {
-	hookManager(game, router)
+	hookManager(Mapgame, router)
 
 	app
 		.use(router.routes())

@@ -2,13 +2,12 @@ import EventClass from './event.class'
 import Accident from './types/accident'
 
 import { getRandomKey, getRandomElement, getProbability } from '../../utilities/random'
-import Manager from '../base/manager.base'
 
 export const eventTypes = {
 	accident: Accident
 }
 
-export default class EventManager extends Manager {
+export default class EventManager extends Mapgame.base.Manager {
 	constructor({ entitiesPath }) {
 		super({ type: 'event', Class: EventClass, classTypes: eventTypes, entitiesPath })
 

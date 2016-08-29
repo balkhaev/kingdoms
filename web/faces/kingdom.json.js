@@ -1,8 +1,15 @@
 export class kingdomFace {
 	constructor() {
 		this.state = null
+		this.history = []
+	}
 
-		this.update = this.update.bind(this)
+	getHistory() {
+		return this.history
+	}
+
+	pushHistory(state) {
+		this.history.push(state)
 	}
 
 	setState(state) {
@@ -11,10 +18,6 @@ export class kingdomFace {
 
 	getState() {
 		return this.state
-	}
-
-	update(world) {
-		this.setState(world.getState())
 	}
 }
 

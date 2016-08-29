@@ -1,33 +1,31 @@
 import gameloop from 'node-gameloop'
 
-import Mapgame from './mapgame'
+import Game from './game'
 import webServer from './web/server'
+import logger from './logger'
 
-global.game = new Mapgame({
+global.Mapgame = new Game({
 	daysLimit: 30,
-	entities: {
-		cardsPath: './entities/cards',
-		eventsPath: './entities/events',
-		kingdomsPath: './entities/kingdoms',
-	}
+	resourcePath: './resources'
 })
 
-game.init()
+Mapgame.init()
+webServer(Mapgame)
 
-webServer(game)
-
-game.after('end', game => {
-	console.log(game.world.getState())
+Mapgame.after('end', game => {
+	console.log(Mapgame.world.getState())
 })
 
-game.start()
+logger(Mapgame, 'world')
+
+Mapgame.start()
 
 export function start() {
-	game.kingdom.entities.forEach(kingdom => {
-		game.world.createKingdom(kingdom)
+	Mapgame.kingdom.entities.forEach(kingdom => {
+		Mapgame.world.createKingdom(kingdom)
 	})
 
-	const gameId = gameloop.setGameLoop(game::game.loop, 1000 / 30)
+	const gameId = gameloop.setGameLoop(Mapgame::Mapgame.loop, 1000 / 30)
 
 	console.log(`[Mapgame][start] New game: ${this.gameId}`)
 }
