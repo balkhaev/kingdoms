@@ -24,9 +24,6 @@ export default class Mapgame extends Hookable {
 		this.card = new CardManager({ entitiesPath: this.cardsPath })
 		this.event = new EventManager({ entitiesPath: this.eventsPath })
 		this.kingdom = new KingdomManager({ entitiesPath: this.kingdomsPath })
-
-		this.end = this.end.bind(this)
-		this.loop = this.loop.bind(this)
 	}
 
 	init() {
@@ -50,7 +47,7 @@ export default class Mapgame extends Hookable {
 			this.world.createKingdom(kingdom)
 		})
 
-		this.gameId = gameloop.setGameLoop(this.loop, 1000 / 30)
+		this.gameId = gameloop.setGameLoop(::this.loop, 1000 / 30)
 
 		console.log(`[Mapgame][start] New game: ${this.gameId}`)
 
@@ -83,16 +80,12 @@ export default class Mapgame extends Hookable {
 	}
 
 	end() {
+		this.callBefore('end', this)
+
 		gameloop.clearGameLoop(this.gameId)
 
-		this.callAfter('end', this.getSummary())
+		this.callAfter('end', this)
 
 		return this
-	}
-
-	getSummary() {
-		return `Frames: ${this.frame}
-======================
-${this.world.history.join("\n\n")}`
 	}
 }
