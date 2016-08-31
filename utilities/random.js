@@ -22,9 +22,7 @@ export function getProbability(capabilities, limit = 1) {
 	const result = []
 
 	capabilities.forEach(({ fn, score }) => {
-		const capabilitiy = new Array(score)
-
-		capabilitiy.fill(fn)
+		const capabilitiy = Array.fill(new Array(score), fn)
 
 		probability.push(...capabilitiy)
 	})

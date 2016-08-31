@@ -1,5 +1,5 @@
 import * as heshelpek from './heshelpek'
-import * as narkia from './narkia'
+import * as narkia from './crabia'
 
 export default [
 	heshelpek,

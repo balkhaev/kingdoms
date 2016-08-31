@@ -3,13 +3,11 @@ import gameloop from 'node-gameloop'
 import Game from './game'
 import webServer from './web/server'
 import logger from './logger'
+import config from './config'
 
-global.Mapgame = new Game({
-	daysLimit: 30,
-	resourcePath: './resources'
-})
+global.Mapgame = new Game(config)
 
-Mapgame.init()
+Mapgame.init(require('./resources').default)
 webServer(Mapgame)
 
 Mapgame.after('end', game => {

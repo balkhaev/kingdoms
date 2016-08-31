@@ -1,3 +1,3 @@
-export const name = 'Narkia'
+export const name = 'Crabia'
 
 export const type = 'common'

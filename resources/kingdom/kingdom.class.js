@@ -20,6 +20,10 @@ export default class Kingdom {
 		this.coffer += count
 	}
 
+	removeCoffer(count = 0) {
+		this.coffer -= count
+	}
+
 	setResidents(residents) {
 		this.residents = residents
 	}
@@ -34,26 +38,5 @@ export default class Kingdom {
 
 	removeResidents(count = 0) {
 		this.residents -= count
-	}
-
-	setMonthEvents(monthEvents) {
-		this.monthEvents = monthEvents
-	}
-
-	getMonthEvents() {
-		return this.monthEvents
-	}
-
-	setWeekEvent(event) {
-		this.event = event
-	}
-
-	getState() {
-		return {
-			name: this.name,
-			type: this.type,
-			coffer: this.coffer,
-			residents: this.residents
-		}
 	}
 }

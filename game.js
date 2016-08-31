@@ -7,28 +7,27 @@ import World from './lib/world.class'
 import ResourceManager from './lib/manager/resource.manager'
 import capitalize from './utilities/capitalize'
 
-export default class Game extends Hookable {
-	constructor({ daysLimit, resourcePath } = {}) {
+export class Game extends Hookable {
+	constructor({ paths: { rootDir, resources }, world }) {
 		super()
 
 		this.frame = 0
+		this.rootDir = rootDir
 
 		this.base = {
 			Hookable,
 			Manager
 		}
-
-		this.daysLimit = daysLimit
-		this.resourcePath = path.join(__dirname, resourcePath)
-
-		this.resources = new ResourceManager({ resourcePath: this.resourcePath })
-		this.world = new World(this.daysLimit)
+		this.resources = new ResourceManager(resources)
+		this.world = new World(world)
 	}
 
-	init() {
-		this.world.init()
-		this.resources.init()
+	init({ cards, events, kingdoms }) {
+		this.resources.add(cards, events, kingdoms)
 
+		this.world = new World({ cards, events, kingdoms })
+
+		this.initManagers()
 		this.initHooks()
 
 		return this
@@ -36,6 +35,18 @@ export default class Game extends Hookable {
 
 	initHooks() {
 		// this.world.after('newWeek', this.event.newWeek)
+	}
+
+	initManagers() {
+		const initManagers = {}
+
+		this.managers.each(Manager => {
+			const manager = new Manager()
+
+			initManagers[manager._type] = manager
+		})
+
+		this.managers = initManagers
 	}
 
 	start() {
@@ -115,3 +126,5 @@ export default class Game extends Hookable {
 		return this
 	}
 }
+
+export default Game

@@ -5,8 +5,10 @@ export const cardTypes = {
 	base: BaseCard
 }
 
-export default class CardManager extends Mapgame.base.Manager {
-	constructor({ entitiesPath }) {
-		super({ type: 'card', Class: CardClass, classTypes: cardTypes, entitiesPath })
+export class CardManager extends Array {
+	constructor() {
+		super()
 	}
 }
+
+export default CardManager
